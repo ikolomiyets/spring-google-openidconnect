@@ -2,35 +2,32 @@ package com.github.fromi.openidconnect.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class UserInfo {
-    private final String id;
     private final String name;
     private final String givenName;
     private final String familyName;
-    private final String gender;
-    private final String picture;
-    private final String link;
+    private final String email;
+    private final List<GrantedAuthority> authorities;
 
     @JsonCreator
-    public UserInfo(@JsonProperty("id") String id,
-                    @JsonProperty("name") String name,
+    public UserInfo(@JsonProperty("sub") String name,
                     @JsonProperty("given_name") String givenName,
                     @JsonProperty("family_name") String familyName,
-                    @JsonProperty("gender") String gender,
-                    @JsonProperty("picture") String picture,
-                    @JsonProperty("link") String link) {
-        this.id = id;
+                    @JsonProperty("email") String email,
+                    @JsonProperty("groups") String groups) {
         this.name = name;
         this.givenName = givenName;
         this.familyName = familyName;
-        this.gender = gender;
-        this.picture = picture;
-        this.link = link;
-    }
-
-    public String getId() {
-        return id;
+        this.email = email;
+        this.authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(groups);
     }
 
     public String getName() {
@@ -45,15 +42,11 @@ public class UserInfo {
         return familyName;
     }
 
-    public String getGender() {
-        return gender;
+    public String getEmail() {
+        return email;
     }
 
-    public String getPicture() {
-        return picture;
-    }
-
-    public String getLink() {
-        return link;
+    public Collection<GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 }

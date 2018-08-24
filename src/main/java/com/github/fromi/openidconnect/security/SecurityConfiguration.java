@@ -32,13 +32,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public OAuth2ClientContextFilter oAuth2ClientContextFilter() {
         return new OAuth2ClientContextFilter();
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
                 .and().authorizeRequests()
-                .antMatchers(GET, "/").permitAll()
-                .antMatchers(GET, "/test").authenticated();
+                .antMatchers(GET, "/", LOGIN_URL).permitAll()
+                .antMatchers(GET, "/test", "/admin").hasRole("OPERATOR")
+                .antMatchers(GET, "/admin").hasRole("ADMINISTRATOR");
     }
 }

@@ -1,25 +1,20 @@
 package com.github.fromi.openidconnect;
 
-import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.startsWith;
-
+import com.jayway.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.jayway.restassured.RestAssured;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.startsWith;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
-@IntegrationTest("server.port:0")
+@SpringBootTest(classes = Application.class, webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SecurityIT {
 
     @Value("${local.server.port}")
@@ -46,6 +41,6 @@ public class SecurityIT {
     public void loginPageRedirectsToGoogle() {
         given().redirects().follow(false).when().get("/login").then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
-                .header("Location", startsWith("https://accounts.google.com/o/oauth2/auth"));
+                .header("Location", startsWith("http://localhost:9763/oauth2/authorize"));
     }
 }
