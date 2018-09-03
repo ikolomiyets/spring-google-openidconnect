@@ -33,6 +33,9 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
         final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity(userInfoUri, UserInfo.class);
+        request.getSession().setAttribute("session_state", request.getParameter("session_state"));
+        request.getSession().setAttribute("code", request.getParameter("code"));
+        request.getSession().setAttribute("state", request.getParameter("state"));
         return new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), userInfoResponseEntity.getBody().getAuthorities());
     }
 }
