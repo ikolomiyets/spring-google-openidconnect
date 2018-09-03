@@ -26,17 +26,10 @@ public class SampleSecuredController {
     private String redirectUri;
 
     @RequestMapping("/test")
-    public String test(
-            Model model,
-            @SessionAttribute("session_state") String sessionState
-    ) {
+    public String test(Model model) {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("userId", userInfo.getName());
-//        model.addAttribute("session_state", sessionState);
-//        model.addAttribute("clientId", clientId);
         model.addAttribute("checkSessionUri", checkSessionUri + "?client_id=" + clientId);
-//        model.addAttribute("authorizationUri", authorizationUri);
-//        model.addAttribute("redirectUri", redirectUri);
         return "test";
     }
 
@@ -44,6 +37,7 @@ public class SampleSecuredController {
     public String admin(Model model) {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("userId", userInfo.getName());
+        model.addAttribute("checkSessionUri", checkSessionUri + "?client_id=" + clientId);
         return "admin";
     }
 }

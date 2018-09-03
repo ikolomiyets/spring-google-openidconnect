@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
+    <script language="JavaScript" type="application/javascript" src="init.js"></script>
+    <script language="JavaScript" type="application/javascript" src="js/oidc.js"></script>
 </head>
 <body>
     Hello <span th:text="${userId}">N/A</span>
+    <iframe id="opIFrame"
+            th:src="${checkSessionUri}"
+            frameborder="0" width="0"
+            height="0"></iframe>
 </body>
 </html>
