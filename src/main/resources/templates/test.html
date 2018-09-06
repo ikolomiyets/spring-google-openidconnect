@@ -6,11 +6,12 @@
     <script language="JavaScript" type="application/javascript" src="init.js"></script>
     <script language="JavaScript" type="application/javascript" src="js/oidc.js"></script>
 </head>
-<body onload="setTimer()">
+<a onload="setTimer()">
     Hello <span th:text="${userId}">N/A</span>
     <iframe id="opIFrame"
             th:src="${checkSessionUri}"
             frameborder="0" width="0"
             height="0"></iframe>
+    <a href="/logout">Logout</a>
 </body>
 </html>
