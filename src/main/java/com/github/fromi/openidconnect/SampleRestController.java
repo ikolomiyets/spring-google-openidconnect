@@ -10,4 +10,8 @@ public class SampleRestController {
     public String getTestResult() {
         return "{\n  \"status\": \"OK\"\n}";
     }
+    @RequestMapping("/admin")
+    public String getAdminResult() {
+        return "{\n  \"status\": \"OK\"\n}";
+    }
 }

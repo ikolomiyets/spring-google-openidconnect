@@ -1,6 +1,9 @@
 package com.github.fromi.openidconnect;
 
 import com.github.fromi.openidconnect.security.UserInfo;
+import com.github.fromi.openidconnect.services.TestService;
+import org.bouncycastle.util.test.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -34,9 +37,12 @@ public class SampleSecuredController {
     @Value("${oauth2.baseUri}")
     private String baseUri;
 
+    @Autowired
+    private TestService testService;
+
     @RequestMapping("/test")
     public String test(Model model) {
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserInfo userInfo = this.testService.getAdmin();
         model.addAttribute("userId", userInfo.getName());
         model.addAttribute("checkSessionUri", checkSessionUri + "?client_id=" + clientId);
         return "test";
@@ -49,7 +55,7 @@ public class SampleSecuredController {
 
     @RequestMapping("/admin")
     public String admin(Model model) {
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserInfo userInfo = this.testService.getAdmin();
         model.addAttribute("userId", userInfo.getName());
         model.addAttribute("checkSessionUri", checkSessionUri + "?client_id=" + clientId);
         return "admin";

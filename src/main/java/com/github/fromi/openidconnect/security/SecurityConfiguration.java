@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +23,7 @@ import static org.springframework.http.HttpMethod.GET;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final String LOGIN_URL = "/login";
@@ -51,7 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(authenticationEntryPoint())
             .and()
                 .authorizeRequests()
-                .antMatchers(GET, "/", LOGIN_URL, "/rest/**").permitAll()
+                .antMatchers(GET, "/", LOGIN_URL).permitAll()
                 .antMatchers(GET, "/test", "/admin").hasRole("OPERATOR")
                 .antMatchers(GET, "/admin").hasRole("ADMINISTRATOR")
             .and()
