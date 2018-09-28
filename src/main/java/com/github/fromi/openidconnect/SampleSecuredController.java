@@ -1,5 +1,6 @@
 package com.github.fromi.openidconnect;
 
+import com.github.fromi.openidconnect.security.OpenIdConfiguration;
 import com.github.fromi.openidconnect.security.UserInfo;
 import com.github.fromi.openidconnect.services.TestService;
 import org.bouncycastle.util.test.Test;
@@ -22,10 +23,10 @@ public class SampleSecuredController {
     @Value("${oauth2.clientId}")
     private String clientId;
 
-    @Value("${oauth2.checkSessionUri}")
+    @Value("${oauth2.checkSessionUri:}")
     private String checkSessionUri;
 
-    @Value("${oauth2.authorizationUri}")
+    @Value("${oauth2.authorizationUri:}")
     private String authorizationUri;
 
     @Value("${oauth2.redirectUri}")
@@ -40,9 +41,19 @@ public class SampleSecuredController {
     @Autowired
     private TestService testService;
 
+    @Autowired
+    private OpenIdConfiguration config;
+
+    public SampleSecuredController() {
+        if (config != null) {
+            checkSessionUri = config.getCheckSessionIframeUri();
+            logoutUri = config.getEndSssionEndpoint();
+        }
+    }
+
     @RequestMapping("/test")
     public String test(Model model) {
-        UserInfo userInfo = this.testService.getAdmin();
+        UserInfo userInfo = this.testService.getTest();
         model.addAttribute("userId", userInfo.getName());
         model.addAttribute("checkSessionUri", checkSessionUri + "?client_id=" + clientId);
         return "test";
