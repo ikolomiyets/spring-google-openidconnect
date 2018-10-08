@@ -51,6 +51,14 @@ public class SampleSecuredController {
         }
     }
 
+    @RequestMapping("/**")
+    public String index(Model model) {
+        UserInfo userInfo = this.testService.getTest();
+        model.addAttribute("userId", userInfo.getName());
+        model.addAttribute("checkSessionUri", checkSessionUri + "?client_id=" + clientId);
+        return "index";
+    }
+
     @RequestMapping("/test")
     public String test(Model model) {
         UserInfo userInfo = this.testService.getTest();
